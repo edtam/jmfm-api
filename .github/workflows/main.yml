@@ -1,0 +1,33 @@
+name: Update data
+
+on:
+  schedule:
+    - cron: '40 12 * * *'
+
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.1.5
+
+      - name: Install packages
+        run: npm ci
+
+      - name: Run script
+        run: npm run update
+        env:
+          JMYWT_TOKEN: ${{ secrets.JMYWT_TOKEN }}
+
+      - name: Commit files
+        run: |
+          git config --local user.email "414689070@qq.com"
+          git config --local user.name "edtam"
+          git add .
+          git commit -m "ci: update data"
+          git push
