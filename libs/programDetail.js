@@ -35,6 +35,6 @@ exports.getProgramDetail = async function (item) {
 }
 
 function isNewEpisode(curr, target) {
-  const getDate = (item) => item.title.slice(0, 8)
-  return getDate(curr) > getDate(target)
+  const getDiffValue = (item) => item.globalid
+  return getDiffValue(curr) > getDiffValue(target)
 }
