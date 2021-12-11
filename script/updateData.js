@@ -1,22 +1,20 @@
 require('dotenv').config()
 const fs = require('fs-extra')
-const { programListFile } = require('../libs/constant')
-const { getProgramDetail } = require('../libs/programDetail')
-const { getProgramList } = require('../libs/programList')
+const { programListPath } = require('../libs/path')
+const { updateProgramDetail } = require('../libs/programDetail')
+const { updateProgramList } = require('../libs/programList')
 
 async function main() {
   try {
-    await getProgramList()
-    if (!fs.existsSync(programListFile)) {
-      console.error('program list not exist')
-      return
+    await updateProgramList()
+    if (!fs.existsSync(programListPath)) {
+      throw new Error('programList not exist')
     }
 
-    const { list } = await fs.readJSON(programListFile)
-    console.log(`programs count ${list.length}`)
+    const { list } = await fs.readJSON(programListPath)
     for (const item of list) {
       console.log(item.id, item.title)
-      await getProgramDetail(item)
+      await updateProgramDetail(item)
     }
   } catch (e) {
     console.error(e)

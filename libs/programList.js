@@ -1,19 +1,16 @@
 const { client } = require('./client')
-const { programListFile } = require('./constant')
+const { programListPath } = require('./path')
 const { saveWithFormat } = require('./save')
 
-exports.getProgramList = async function () {
+exports.updateProgramList = async function () {
   const apiName = 'fmprogramtoplistApiget'
-  try {
-    const { fmprogramtoplist = '' } = await client(apiName)
-    const text = fmprogramtoplist.replace(/\s/g, '')
-    const { pglist = [] } = JSON.parse(text)
-    if (!pglist && !pglist.length) {
-      return Promise.reject('program list got null')
-    }
+  const { fmprogramtoplist = '' } = await client(apiName)
+  const text = fmprogramtoplist.replace(/\s/g, '')
+  const { pglist = [] } = JSON.parse(text)
 
-    await saveWithFormat(programListFile, { list: pglist })
-  } catch (e) {
-    return Promise.reject(e)
+  if (!pglist && !pglist.length) {
+    throw new Error('programList got null')
   }
+
+  await saveWithFormat(programListPath, { list: pglist })
 }
