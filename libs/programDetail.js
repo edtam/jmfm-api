@@ -24,7 +24,7 @@ exports.updateProgramDetail = async function (item) {
   // 对比出新节目内容
   const newData = []
   for (const episode of tvlist) {
-    if (!isNewEpisode(episode, list[0])) {
+    if (list[0] && !isNewEpisode(episode, list[0])) {
       break
     }
     newData.push(episode)
